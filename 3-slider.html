@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="js/events.js"></script>
+</head>
+<body>
+	
+	<script type="text/javascript">
+	var slider = new Slider({
+		/*step:*/
+		/*max:100,
+		min:0,
+		value:50,*/
+		context:document.body;
+	});
+
+	slider.on('change',function(){
+		console.log(this.value);
+	});
+
+	document.ondblclick = function(){
+		console.log(1);
+		slider.off('change');
+	};
+	</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	a.active{
+		background: yellow;
+	}
+	p{
+		display: none;
+	}
+	.show{
+		display: block;
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<a href="javascript:;" class="active">tab1</a>
+		<a href="javascript:;">tab2</a>
+		<a href="javascript:;">tab3</a>
+		<p class="show">content1</p>
+		<p>content2</p>
+		<p>content3</p>
+
+	</div>
+	<div>
+		<a href="javascript:;" class="active">tab1</a>
+		<a href="javascript:;">tab2</a>
+		<a href="javascript:;">tab3</a>
+		<p class="show">content1</p>
+		<p>content2</p>
+		<p>content3</p>
+
+	</div>
+	<input type="button" value="开始播放">
+	<input type="button" value="停止所有">
+	<input type="button" value="反转">
+	<script type="text/javascript">
+
+		var Tab = function(obj){
+			this.obj = obj;
+			this.btns = obj.getElementsByTagName('a');
+			this.con = obj.getElementsByTagName('p');
+			this.num = 0;
+			this.isAutoPlay = false;
+			this.init();
+		};
+		Tab.prototype.init = function(){
+			var self = this;
+			for(var i=0;i<this.btns.length;i++){
+				this.btns[i].index = i;
+				this.btns[i].onclick = function(){
+					self.clearAll();
+					this.className = 'active';
+					self.con[this.index].className = 'show';
+				};
+			}
+		};
+		Tab.prototype.clearAll = function(){
+
+			for(var i=0;i<this.btns.length;i++){
+				this.btns[i].className = '';
+				this.con[i].className = '';
+			}
+		};
+		Tab.prototype.autoplay = function(time){
+			clearInterval(this.timer);
+			var self = this;
+			this.timer = setInterval(function(){
+				self.num++;
+				self.num%=self.btns.length;
+				self.clearAll();
+				self.btns[self.num].className = 'active';
+				self.con[self.num].className = 'show';
+			}, time);
+		};
+		Tab.prototype.stop = function(){
+			clearInterval(this.timer);
+		};
+		var divs = document.getElementsByTagName('div');
+
+		var tab1 = new Tab(divs[0]);
+		var tab2 = new Tab(divs[1]);
+		tab1.autoplay(500);
+		tab2.autoplay(1000);
+	</script>
+</body>
+</html>
