@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	#drag{
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	</style>
+</head>
+<body>
+	<div id="drag"></div>
+	<script type="text/javascript">
+	
+	var Drag = function(ele){
+		this.ele = ele;
+		//用来判断是否开启范围限制。
+		this.isRange = false;
+		this.init();
+	};
+	Drag.prototype = {
+		//指向自身的原因防止多个原型链混杂
+		constructor: Drag,
+		init:function(){
+			var self = this;
+			this.ele.onmousedown = function(ev){
+				var disx = ev.clientX - this.offsetLeft;
+				var disy = ev.clientY - this.offsetTop;
+				var that = this;
+
+				document.onmousemove = function(ev){
+					self.x = ev.clientX - disx;
+					self.y = ev.clientY - disy;
+					
+					self.administerRange();
+
+					that.style.cssText = 'left:'+self.x+'px;top:'+self.y+'px';
+				};
+				document.onmouseup = function(){
+					this.onmousemove = this.onmouseup = null;
+				};
+			};
+		},
+		range:function(opt){
+			var docele = document.documentElement;//body
+			opt = opt||{};
+			opt.minLeft = opt.minLeft||0;
+			opt.minTop = opt.minTop||0;
+			opt.maxLeft = opt.maxLeft||docele.clientWidth - this.ele.offsetWidth;
+			opt.maxTop = opt.maxTop||docele.clientHeight - this.ele.offsetHeight;
+
+			this.opt = opt;
+			this.isRange = true;
+		},
+		administerRange:function(){
+			if(!this.isRange)return;
+
+			var opt = this.opt;
+			if(this.x<opt.minLeft){
+				this.x = opt.minLeft
+			}
+			if(this.y<opt.minTop){
+				this.y = opt.minTop
+			}
+			if(this.x>opt.maxLeft){
+				this.x = opt.maxLeft
+			}
+			if(this.y>opt.maxTop){
+				this.y = opt.maxTop
+			}
+		}
+	};
+	var div = document.getElementById('drag');
+
+	var d1 = new Drag(div);
+	d1.range();
+	</script>
+</body>
+</html>
