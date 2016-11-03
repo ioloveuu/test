@@ -13,7 +13,7 @@ try {
 。
 那该怎么办呢 ？大家勿急，下面的小妙招正为你打开：
 (hide) 举个例子，某个资源链接是：
-[http://coolapk.com/r/1pe0[
+[http://coolapk.com/r/1pe0]
 把网址后面分享id复制下来就是3238350839 
 这是百度的默认网盘分享主页
 http://coolapk.com/r/1pe1
