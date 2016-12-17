@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            background: #eee;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            left: 10%;
+            top: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="650" height="650"></canvas>
+    <script src="utils.js"></script>
+    <script>
+    var Tween = {
+        Bounce: {
+            easeIn: function(t, b, c, d) {
+                return c - Tween.Bounce.easeOut(d - t, 0, c, d) + b;
+            },
+            easeOut: function(t, b, c, d) {
+                if ((t /= d) < (1 / 2.75)) {
+                    return c * (7.5625 * t * t) + b;
+                } else if (t < (2 / 2.75)) {
+                    return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+                } else if (t < (2.5 / 2.75)) {
+                    return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+                } else {
+                    return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+                }
+            },
+            easeInOut: function(t, b, c, d) {
+                if (t < d / 2) {
+                    return Tween.Bounce.easeIn(t * 2, 0, c, d) * .5 + b;
+                } else {
+                    return Tween.Bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+                }
+            }
+        }
+    }
+    var canvas = document.getElementById('canvas');
+    var cxt = canvas.getContext('2d');
+
+    var w = h = 650;
+
+
+    var data = [
+        {
+            name:'red',
+            data:300,
+            color:'rgba(250,20,20,.6)'
+        },
+        {
+            name:'blue',
+            data:50,
+            color:'rgba(43,98,251,.6)'
+        },
+        {
+            name:'yellow',
+            data:100,
+            color:'rgba(249,251,87,.6)'
+        },
+        {
+            name:'grey',
+            data:40,
+            color:'rgba(196,207,128,.6)'
+        },
+        {
+            name:'black',
+            data:120,
+            color:'rgba(0, 0, 0,.5)'
+        }
+    ]
+
+
+    function drawBg() {
+        var r = 50;//背景半径
+        cxt.save();
+        cxt.translate(w / 2, h / 2);//圆形中心
+        cxt.lineWidth = 2;
+        cxt.strokeStyle = 'lightgrey';
+        //背景6个圆
+        for (var i = 0; i < 6; i++) {
+            cxt.beginPath();
+            cxt.arc(0, 0, r * (i + 1), 0, 2 * Math.PI);
+            cxt.stroke();
+        }
+        cxt.restore();
+    }
+    var angle = Math.PI * 2 / 5;//内容5个圆平均角度
+    drawBg()
+
+    var n = 0;
+    var s = Date.now();
+
+    function update() {
+        var t = Date.now() - s;
+        //上一帧时间差值
+        console.log(t)
+        var b = 0;
+        var c = 0.4;
+        var d = 2100;
+        n = Tween.Bounce.easeInOut(t, b, c, d)
+        if (t < d) {
+            cxt.clearRect(0, 0, w, h)
+            drawBg()
+            drawRed(n);
+            fillText()
+            window.requestAnimationFrame(update);
+        }
+    }
+    window.requestAnimationFrame(update);
+
+    function drawRed(n) {
+        cxt.save();
+        cxt.translate(w / 2, h / 2);
+        cxt.strokeStyle = 'red';
+        
+        for(var i=0; i<5; i++){
+            cxt.beginPath();
+            cxt.fillStyle = data[i].color;
+            cxt.strokeStyle = 'green';
+            cxt.lineWidth = 2;
+            cxt.moveTo(0, 0)
+            cxt.arc(0, 0, data[i].data, Math.PI * 3 / 2 + angle*i, Math.PI * 3 / 2 + angle*i + Math.PI * n);
+            cxt.closePath();
+            cxt.fill();
+            cxt.stroke()
+        }
+        cxt.restore();
+    }
+
+    function fillText(){
+        cxt.save();
+        cxt.translate(w/2,h/2);
+
+        cxt.save();
+        cxt.fillStyle = 'rgba(255,255,255,.4)';
+        for(var i=0; i<6; i++){
+            cxt.beginPath();
+            cxt.fillRect(0-12,-50*(i+1)-8,24,16)
+        }
+        cxt.restore();
+
+        cxt.font = '12px Arial';
+        cxt.fillStyle = '#000000';
+        cxt.textAlign = 'center';
+        cxt.textBaseline = 'middle';
+        for(var i=0; i<6; i++){
+            cxt.fillText(50*(i+1),0,-50*(i+1))
+        }
+
+        cxt.restore();
+    }
+
+    fillText()
+
+
+    </script>
+</body>
+
+</html>
