@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+    //将json串转换成树形结构
+    function transData(a, idStr, pidStr, chindrenStr) {
+        var r = [], hash = {}, id = idStr, pid = pidStr, children = chindrenStr, i = 0, j = 0, len = a.length;
+        for (; i < len; i++) {
+            hash[a[i][id]] = a[i];
+        }
+        for (; j < len; j++) {
+            var aVal = a[j], hashVP = hash[aVal[pid]];
+            if (hashVP) {
+                !hashVP[children] && (hashVP[children] = []);
+                hashVP[children].push(aVal);
+            } else {
+                r.push(aVal);
+            }
+        }
+        return r;
+    }
+    
+    //测试方法
+    function test() {
+        //json串
+        var jsonData = eval([
+            {
+                "belongsname":"",
+                "id":901,"isleaf":0,
+                "name":"XJBHX-2标项目部",
+                "pid":"",
+                "type":""
+            },
+            {
+                "belongsname":"",
+                "id":902,"isleaf":1,
+                "name":"综合部(办公室)",
+                "pid":"901","type":""
+            },
+            {
+                "belongsname":"",
+                "id":903,"isleaf":1,
+                "name":"工程部(工技部/技术部)",
+                "pid":"901","type":""
+            },
+            {
+                "belongsname":"",
+                "id":904,"isleaf":1,
+                "name":"安质部",
+                "pid":"901","type":""
+            },
+            {
+                "belongsname":"",
+                "id":905,"isleaf":1,
+                "name":"计财部",
+                "pid":"901","type":""
+            },
+            {
+                "belongsname":"",
+                "id":906,
+                "isleaf":1,
+                "name":"物设部(物机部)",
+                "pid":"901","type":""
+            },
+            {
+                "belongsname":"",
+                "id":907,"isleaf":1,
+                "name":"中心试验室",
+                "pid":"901","type":""
+            }
+            ]);
+        //绑定的字段
+        var jsonDataTree = transData(jsonData, 'id', 'pid', 'chindren');
+        console.log(jsonDataTree);
+    }
+    //窗体加载执行的方法
+    window.onload = test;
+</script>
+</head>
+</head>
+<body>
+</body>
+</html>
