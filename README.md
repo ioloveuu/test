@@ -8,7 +8,8 @@ try {
   //   
 }
 ```
-
+4-19: forenoon: 研究
+      afternoon: 写代码
 
 # 一天一练习，加油，持之以恒！
 1. `tree menu`
