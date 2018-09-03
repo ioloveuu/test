@@ -1,6 +1,6 @@
 # test
 简单小功能 练习`Simple function`
-试一试
+试一试啊
 ```javascript
 try {
   //   `my dream,my world`
